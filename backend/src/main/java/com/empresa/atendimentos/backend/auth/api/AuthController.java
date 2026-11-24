@@ -1,0 +1,24 @@
+package com.empresa.atendimento.auth.api;
+
+import com.empresa.atendimento.auth.api.dto.LoginRequest;
+import com.empresa.atendimento.auth.api.dto.LoginResponse;
+import com.empresa.atendimento.auth.application.AuthenticationService;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
+@RestController
+@RequestMapping("/api/auth")
+public class AuthController {
+
+    private final AuthenticationService authenticationService;
+
+    public AuthController(AuthenticationService authenticationService) {
+        this.authenticationService = authenticationService;
+    }
+
+    @PostMapping("/login")
+    public ResponseEntity<LoginResponse> login(@RequestBody LoginRequest request) {
+        String token = authenticationService.login(request.username(), request.password());
+        return ResponseEntity.ok(new LoginResponse(token));
+    }
+}
